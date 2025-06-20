@@ -51,8 +51,8 @@ class OnGridInv(Inverter):
     """并网逆变器."""
 
     __sensors: tuple[Sensor, ...] = (
-        Timestamp("timestamp", 10100, "Timestamp"),
-        Integer("rssi", 10103, "RSSI"),
+        Timestamp("timestamp", 10100, "Timestamp", SensorKind.TIME),
+        Integer("rssi", 10103, "RSSI", "%", SensorKind.RSS),
         Integer("safety_country", 10104, "Safety Country code"),
         Enum2("work_status", 10105, "Work Status", WORK_STATUS),
     )
@@ -211,13 +211,11 @@ class OnGridInv(Inverter):
         runtime_data = self._map_response(response, self._sensors)
         response = await self._read_from_socket(self._READ_RUNTIME_DATA2)
         runtime_data.update(self._map_response(response, self._sensors2))
-        ppv = runtime_data.get(PPV, 0)
         pmeter = runtime_data.get(PMETER, 0) or 0
+        runtime_data[PPV] = runtime_data[PAC]
         # 计算pload
         if await self.read_setting(GRID_EXPORT_LIMIT_ENABLE):
-            runtime_data[PLOAD] = ppv - pmeter
-        else:
-            runtime_data[PPV] = runtime_data[PAC]
+            runtime_data[PLOAD] = runtime_data[PPV] - pmeter
         return runtime_data
 
     async def read_setting(self, setting_id: str) -> Any:
@@ -250,7 +248,7 @@ class OnGridInv(Inverter):
 
     def settings(self) -> tuple[Sensor, ...]:
         """返回设置列表."""
-        return tuple(self._settings.values()) # type: ignore[]
+        return tuple(self._settings.values())  # type: ignore[]
 
 
 class HybridInv(OnGridInv):
