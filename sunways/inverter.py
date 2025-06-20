@@ -59,7 +59,8 @@ class SensorKind(Enum):
     GRID = 5
     BMS = 6
     TEMP = 7
-
+    TIME = 8
+    RSS = 9
 
 @dataclass
 class Sensor:
