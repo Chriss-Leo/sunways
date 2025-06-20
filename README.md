@@ -1,9 +1,9 @@
 # Sunways
 
 [![PyPi](https://img.shields.io/pypi/v/sunways.svg)](https://pypi.python.org/pypi/sunways/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/sunways.svg)](https://github.com/chrisleo/sunways/)
-[![Build Status](https://github.com/chrisleo/sunways/actions/workflows/publish.yaml/badge.svg)](https://github.com/chrisleo/sunways/actions/workflows/publish.yaml)
-![License](https://img.shields.io/github/license/chrisleo/sunways.svg)
+[![Python Versions](https://img.shields.io/pypi/pyversions/sunways.svg)](https://github.com/Chriss-Leo/sunways/)
+[![Build Status](https://github.com/Chriss-Leo/sunways/actions/workflows/publish.yaml/badge.svg)](https://github.com/Chriss-Leo/sunways/actions/workflows/publish.yaml)
+![License](https://img.shields.io/github/license/Chriss-Leo/sunways.svg)
 
 Library for connecting to Sunways inverter over local network and retrieving runtime sensor values and configuration
 parameters.
