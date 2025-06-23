@@ -242,6 +242,9 @@ class OnGridInv(Inverter):
         if 0 <= value <= 100:
             await self.write_setting(GRID_EXPORT_LIMIT, value * 10)
 
+    def get_on_grid_settings(self) -> tuple[Sensor, ...]:
+        return self.__settings_on_grid
+
     def sensors(self) -> tuple[Sensor, ...]:
         """返回传感器列表."""
         return self._sensors + self._sensors2
@@ -278,7 +281,7 @@ class HybridInv(OnGridInv):
             0xA7F8, 4
         )
         self._settings: dict[str, Sensor] = {
-            s.id_: s for s in self.__settings_hybrid + self.__settings_on_grid
+            s.id_: s for s in self.__settings_hybrid + self.get_on_grid_settings()
         }
         self._sensors_battery = self.__sensors_battery
         self.battery_version: str | None = None
