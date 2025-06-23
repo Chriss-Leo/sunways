@@ -259,6 +259,8 @@ class HybridInv(OnGridInv):
 
     __sensors_battery: tuple[Sensor, ...] = (
         Power("p_battery", 40258, "Battery Power", SensorKind.BAT),
+    )
+    __sensors_battery2: tuple[Sensor, ...] = (
         Power(BATTERY_SOC, 43000, "SOC", SensorKind.BAT),
         Integer(BATTERY_SOH, 43001, "SOH", "%", SensorKind.BAT),
         Temp("battery_temperature", 43003, "Battery Temperature", SensorKind.TEMP),
@@ -284,6 +286,7 @@ class HybridInv(OnGridInv):
             s.id_: s for s in self.__settings_hybrid + self.get_on_grid_settings()
         }
         self._sensors_battery = self.__sensors_battery
+        self._sensors_battery2 = self.__sensors_battery2
         self.battery_version: str | None = None
         self.category = Category.HYBRID
 
@@ -303,7 +306,7 @@ class HybridInv(OnGridInv):
         response = await self._read_from_socket(self._READ_BATTERY_RUNTIME_DATA1)
         runtime_data.update(self._map_response(response, self._sensors_battery))
         response = await self._read_from_socket(self._READ_BATTERY_RUNTIME_DATA2)
-        runtime_data.update(self._map_response(response, self._sensors_battery))
+        runtime_data.update(self._map_response(response, self._sensors_battery2))
         ppv = runtime_data.get(PPV, 0)
         pmeter = runtime_data.get(PMETER, 0) or 0
         runtime_data[PLOAD] = ppv - pmeter
@@ -315,7 +318,7 @@ class HybridInv(OnGridInv):
 
     def sensors(self) -> tuple[Sensor, ...]:
         """返回储能机传感器列表."""
-        return self._sensors + self._sensors2 + self._sensors_battery
+        return self._sensors + self._sensors2 + self._sensors_battery + self._sensors_battery2
 
 
 class InvHelper(OnGridInv):
